@@ -6,10 +6,12 @@ const { GenerateToke, ConvertEmailToLowercase } = require('../utils/utiluser');
 exports.SignUp =async (req,res)=>{
     
     const data=req.body
+    console.log("data",data)
     const username=data.username
     const email=data.email
+    // console.log("email",email)
 
-    const actual_email=ConvertEmailToLowercase(email)
+    const actual_email=email.toLowerCase()
 
     const password=data.password
 
@@ -20,10 +22,10 @@ exports.SignUp =async (req,res)=>{
     const result=await UsersModel.findOne({email:actual_email})
 
     if(result){
-        res.status(404).json({msg:"User already exists"})
+        res.status(404).json({msg:"user already exists"})
     }else{
-        
-        async function hashpassword(plainPassword){
+        try{
+            async function hashpassword(plainPassword){
         const saltRounds=5;
         const hashedPassword= await bcrypt.hash(plainPassword,saltRounds)
         return hashedPassword
@@ -47,7 +49,11 @@ exports.SignUp =async (req,res)=>{
         res.status(200).json({msg:"New user is added",
             token:token
         })
-    }
+        }catch(err){
+            console.error(err.message)
+        }     
+        
+}
 }
 
 exports.SignIn=async(req,res)=>{
