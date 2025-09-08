@@ -8,7 +8,18 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 require("./src/controller/passport-config");
 
-app.use(cors());
+// app.use(cors({
+//   origin:"https://ecomm-uiux.netlify.app/",
+//   methods:["GET","POST","PUT","DELETE"],
+//   credentials:true
+// }));
+
+app.use(cors({
+  origin:'*'
+}));
+
+
+
 app.use(express.json());
 dotenv.config();
 
